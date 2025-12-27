@@ -19,12 +19,11 @@ const loadState = <T,>(key: string, fallback: T): T => {
 };
 
 const App: React.FC = () => {
-  // 1. Daily Focus (with Persistence)
   const [dailyFocus, setDailyFocus] = useState<string>(() => loadState('lifeos_focus', ''));
-
-  // 2. Tasks (with Persistence)
   const [tasks, setTasks] = useState<Task[]>(() => loadState('lifeos_tasks', []));
-  
+  const [book, setBook] = useState<Book | null>(() => loadState('lifeos_book', null));
+  const [links, setLinks] = useState<QuickLink[]>(() => loadState('lifeos_links', []));
+
   const toggleTask = (id: string) => {
     setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
   };
@@ -41,7 +40,7 @@ const App: React.FC = () => {
       tag,
       time: time || undefined
     };
-    setTasks(prev => [newTask, ...prev]); // Add to top
+    setTasks(prev => [newTask, ...prev]);
   };
 
   const reorderTasks = (dragIndex: number, hoverIndex: number) => {
@@ -52,44 +51,27 @@ const App: React.FC = () => {
     setTasks(newTasks);
   };
 
-  // 3. Reading Tracker (with Persistence)
-  const [book, setBook] = useState<Book | null>(() => loadState('lifeos_book', null));
-
-  // 4. Quick Links (with Persistence)
-  const [links, setLinks] = useState<QuickLink[]>(() => loadState('lifeos_links', []));
-
   const addLink = (label: string, url: string, icon: IconType) => {
     setLinks(prev => [...prev, { id: Date.now().toString(), label, url, icon }]);
   };
   const deleteLink = (id: string) => setLinks(prev => prev.filter(l => l.id !== id));
 
-  // --- AUTO-SAVE EFFECTS ---
-  useEffect(() => {
-    localStorage.setItem('lifeos_focus', JSON.stringify(dailyFocus));
-  }, [dailyFocus]);
-
-  useEffect(() => {
-    localStorage.setItem('lifeos_tasks', JSON.stringify(tasks));
-  }, [tasks]);
-
-  useEffect(() => {
-    localStorage.setItem('lifeos_book', JSON.stringify(book));
-  }, [book]);
-
-  useEffect(() => {
-    localStorage.setItem('lifeos_links', JSON.stringify(links));
-  }, [links]);
+  useEffect(() => localStorage.setItem('lifeos_focus', JSON.stringify(dailyFocus)), [dailyFocus]);
+  useEffect(() => localStorage.setItem('lifeos_tasks', JSON.stringify(tasks)), [tasks]);
+  useEffect(() => localStorage.setItem('lifeos_book', JSON.stringify(book)), [book]);
+  useEffect(() => localStorage.setItem('lifeos_links', JSON.stringify(links)), [links]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 pb-12 selection:bg-indigo-500/30 selection:text-indigo-200 font-sans">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+    <div className="min-h-screen bg-vesper-bg text-vesper-text pb-12 selection:bg-vesper-gold selection:text-vesper-bg font-sans">
+      <div className="max-w-3xl mx-auto px-6 py-12 md:py-16">
         <Header />
         
         <DailyFocus focus={dailyFocus} setFocus={setDailyFocus} />
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Tasks Column */}
-          <div className="lg:col-span-2">
+        {/* Main Content Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {/* Main Tasks Column - Wider */}
+          <div className="md:col-span-2">
             <TaskList 
               tasks={tasks} 
               onToggle={toggleTask} 
@@ -99,8 +81,8 @@ const App: React.FC = () => {
             />
           </div>
           
-          {/* Right Sidebar */}
-          <div className="lg:col-span-1 flex flex-col gap-8">
+          {/* Right Sidebar - Sticky maybe? */}
+          <div className="md:col-span-1 flex flex-col gap-8">
             <ReadingTracker 
               book={book}
               onUpdateBook={setBook}
@@ -114,8 +96,8 @@ const App: React.FC = () => {
           onDeleteLink={deleteLink}
         />
         
-        <footer className="mt-16 text-center text-slate-800 text-xs">
-          <p>© 2024 Life Operating System. Execute daily.</p>
+        <footer className="mt-20 text-center text-vesper-text opacity-30 text-[10px] font-mono">
+          <p>SYSTEM.READY</p>
         </footer>
       </div>
     </div>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Battery, Wifi } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const [date, setDate] = useState(new Date());
@@ -9,37 +8,29 @@ export const Header: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (d: Date) => {
-    return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-  };
-
   const formatDate = (d: Date) => {
     return d.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
   };
 
-  const dateString = formatDate(date);
-  const formattedDate = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+  const formattedDate = formatDate(date);
 
   return (
-    <header className="flex flex-col gap-2 mb-8 animate-fade-in select-none">
-      <div className="flex justify-between items-center text-slate-400 text-xs uppercase tracking-widest">
-        <span>Life Operating System v2.1</span>
-        <div className="flex items-center gap-3">
-          <Wifi size={14} />
-          <Battery size={14} />
-          <span>100%</span>
-        </div>
-      </div>
-      
-      <div className="flex justify-between items-end mt-4">
+    <header className="flex flex-col gap-6 mb-12 animate-fade-in select-none">
+      <div className="flex justify-between items-start border-b border-vesper-border pb-6">
         <div>
-          <h2 className="text-slate-400 text-lg font-medium">{formattedDate}</h2>
-          <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight mt-1">
-            Bom dia, <span className="text-indigo-400">Davi</span>.
+          <h2 className="text-vesper-gold font-mono text-xs uppercase tracking-widest mb-2 opacity-80">
+             // {formattedDate}
+          </h2>
+          <h1 className="text-3xl md:text-4xl font-semibold text-vesper-title tracking-tight">
+            Olá, Davi.
           </h1>
         </div>
-        <div className="text-5xl md:text-6xl font-light text-slate-700 tabular-nums hidden sm:block">
-          {formatTime(date)}
+        
+        {/* Abstract Decorative Element */}
+        <div className="flex gap-1.5 pt-2">
+            <div className="w-2 h-2 rounded-full bg-vesper-gold opacity-80"></div>
+            <div className="w-2 h-2 rounded-full bg-vesper-border"></div>
+            <div className="w-2 h-2 rounded-full bg-vesper-border"></div>
         </div>
       </div>
     </header>

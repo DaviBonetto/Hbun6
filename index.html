@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Life OS | Personal Dashboard</title>
+    <title>Life OS | Vesper Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         darkMode: 'class',
@@ -13,16 +13,19 @@
           extend: {
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
             },
             colors: {
-              slate: {
-                850: '#1e293b',
-                900: '#0f172a',
-                950: '#020617',
-              },
-              accent: {
-                500: '#6366f1', // Indigo
-                600: '#4f46e5',
+              vesper: {
+                bg: '#101010',       /* Main Background */
+                surface: '#161616',  /* Cards/Inputs */
+                border: '#232323',   /* Subtle Borders */
+                text: '#A0A0A0',     /* Muted Text */
+                title: '#FFFFFF',    /* High Contrast Text */
+                gold: '#FFCFA8',     /* Primary Vesper Accent */
+                purple: '#A0A0E5',   /* Secondary Accent */
+                red: '#F66E6E',      /* Errors/Delete */
+                green: '#98C379',    /* Success */
               }
             },
             animation: {
@@ -44,23 +47,27 @@
       }
     </script>
     <style>
-      /* Custom Scrollbar for a cleaner look */
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #0f172a; 
+        background: #101010; 
       }
       ::-webkit-scrollbar-thumb {
-        background: #334155; 
-        border-radius: 4px;
+        background: #232323; 
+        border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #475569; 
+        background: #333; 
       }
       body {
-        background-color: #020617; /* Slate 950 */
-        color: #f8fafc;
+        background-color: #101010;
+        color: #E0E0E0;
+      }
+      /* Remove default outline on focus and replace with subtle vesper border */
+      *:focus-visible {
+        outline: 1px solid #FFCFA8;
+        outline-offset: 2px;
       }
     </style>
   <script type="importmap">
