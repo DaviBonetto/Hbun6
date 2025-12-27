@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { Cloud } from 'lucide-react';
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  onOpenSettings: () => void;
+  isSynced: boolean;
+}
+
+export const Header: React.FC<HeaderProps> = ({ onOpenSettings, isSynced }) => {
   const [date, setDate] = useState(new Date());
 
   useEffect(() => {
@@ -26,11 +32,22 @@ export const Header: React.FC = () => {
           </h1>
         </div>
         
-        {/* Abstract Decorative Element */}
-        <div className="flex gap-1.5 pt-2">
-            <div className="w-2 h-2 rounded-full bg-vesper-gold opacity-80"></div>
-            <div className="w-2 h-2 rounded-full bg-vesper-border"></div>
-            <div className="w-2 h-2 rounded-full bg-vesper-border"></div>
+        <div className="flex flex-col items-end gap-3">
+            {/* Decorative Dots */}
+            <div className="flex gap-1.5 pt-2">
+                <div className="w-2 h-2 rounded-full bg-vesper-gold opacity-80"></div>
+                <div className="w-2 h-2 rounded-full bg-vesper-border"></div>
+                <div className="w-2 h-2 rounded-full bg-vesper-border"></div>
+            </div>
+
+            {/* Sync Button */}
+            <button 
+                onClick={onOpenSettings}
+                className={`p-2 rounded-full transition-all ${isSynced ? 'text-vesper-gold bg-vesper-gold/10' : 'text-vesper-text hover:text-vesper-gold'}`}
+                title="Sincronização Nuvem"
+            >
+                <Cloud size={18} />
+            </button>
         </div>
       </div>
     </header>

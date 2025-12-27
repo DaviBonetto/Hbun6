@@ -49,3 +49,9 @@ export interface Project {
   status: 'Active' | 'Paused' | 'Done';
   progress: number;
 }
+
+export interface CloudConfig {
+  binId: string;
+  apiKey: string;
+  autoSync: boolean;
+}
