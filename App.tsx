@@ -23,6 +23,9 @@ const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(() => loadState('lifeos_tasks', []));
   const [book, setBook] = useState<Book | null>(() => loadState('lifeos_book', null));
   const [links, setLinks] = useState<QuickLink[]>(() => loadState('lifeos_links', []));
+  
+  // System status for auto-save feedback
+  const [systemStatus, setSystemStatus] = useState<'READY' | 'SAVING'>('READY');
 
   const toggleTask = (id: string) => {
     setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
@@ -56,10 +59,34 @@ const App: React.FC = () => {
   };
   const deleteLink = (id: string) => setLinks(prev => prev.filter(l => l.id !== id));
 
-  useEffect(() => localStorage.setItem('lifeos_focus', JSON.stringify(dailyFocus)), [dailyFocus]);
-  useEffect(() => localStorage.setItem('lifeos_tasks', JSON.stringify(tasks)), [tasks]);
-  useEffect(() => localStorage.setItem('lifeos_book', JSON.stringify(book)), [book]);
-  useEffect(() => localStorage.setItem('lifeos_links', JSON.stringify(links)), [links]);
+  // Auto-save effects with status indicator
+  useEffect(() => {
+    setSystemStatus('SAVING');
+    localStorage.setItem('lifeos_focus', JSON.stringify(dailyFocus));
+    const timer = setTimeout(() => setSystemStatus('READY'), 500);
+    return () => clearTimeout(timer);
+  }, [dailyFocus]);
+
+  useEffect(() => {
+    setSystemStatus('SAVING');
+    localStorage.setItem('lifeos_tasks', JSON.stringify(tasks));
+    const timer = setTimeout(() => setSystemStatus('READY'), 500);
+    return () => clearTimeout(timer);
+  }, [tasks]);
+
+  useEffect(() => {
+    setSystemStatus('SAVING');
+    localStorage.setItem('lifeos_book', JSON.stringify(book));
+    const timer = setTimeout(() => setSystemStatus('READY'), 500);
+    return () => clearTimeout(timer);
+  }, [book]);
+
+  useEffect(() => {
+    setSystemStatus('SAVING');
+    localStorage.setItem('lifeos_links', JSON.stringify(links));
+    const timer = setTimeout(() => setSystemStatus('READY'), 500);
+    return () => clearTimeout(timer);
+  }, [links]);
 
   return (
     <div className="min-h-screen bg-vesper-bg text-vesper-text pb-12 selection:bg-vesper-gold selection:text-vesper-bg font-sans">
@@ -81,7 +108,7 @@ const App: React.FC = () => {
             />
           </div>
           
-          {/* Right Sidebar - Sticky maybe? */}
+          {/* Right Sidebar */}
           <div className="md:col-span-1 flex flex-col gap-8">
             <ReadingTracker 
               book={book}
@@ -96,8 +123,14 @@ const App: React.FC = () => {
           onDeleteLink={deleteLink}
         />
         
-        <footer className="mt-20 text-center text-vesper-text opacity-30 text-[10px] font-mono">
-          <p>SYSTEM.READY</p>
+        <footer className="mt-20 flex justify-center">
+          <div className="text-center">
+            <p className={`text-[10px] font-mono transition-colors duration-300 ${
+              systemStatus === 'SAVING' ? 'text-vesper-gold' : 'text-vesper-text opacity-30'
+            }`}>
+              SYSTEM.{systemStatus}
+            </p>
+          </div>
         </footer>
       </div>
     </div>
